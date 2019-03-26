@@ -29,6 +29,7 @@
     "react/jsx-filename-extension": "off",
     "no-unused-vars": "off",
     "no-console": "error",
-    "react/prefer-stateless-function": "off"
+    "react/prefer-stateless-function": "off",
+    "linebreak-style": "off"
   }
 }
