@@ -1,16 +1,15 @@
 {
   "presets": [
-    [
-      "es2015",
-      {
-        "module": false
-      }
-    ],
-    "react",
-    "stage-1"
+    "@babel/preset-react",
+    ["@babel/preset-env", {
+      "useBuiltIns": "usage"
+    }]
   ],
   "plugins": [
-    "react-hot-loader/babel",
-    "transform-runtime", ["import", { "libraryName": "antd", "style": true }]
+    "@babel/plugin-transform-runtime",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    "@babel/plugin-syntax-dynamic-import",
+    "react-hot-loader/babel"
   ]
 }

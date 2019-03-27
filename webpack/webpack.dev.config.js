@@ -3,26 +3,39 @@
  */
 
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const webpackConfig = require('./webpack.config');
 
-process.env.NODE_ENV = 'development';
+webpackConfig.entry.index.unshift('react-hot-loader/patch');
 
 module.exports = merge(webpackConfig, {
+  mode: 'development',
   devtool: 'cheap-module-eval-source-map',
-  entry: [
-    'babel-polyfill',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:9090',
-    'webpack/hot/only-dev-server',
-    path.resolve(__dirname, '../src/index.js'),
-  ], // 指定入口文件，程序从这里开始编译,__dirname当前目录, ../表示上一级目录, ./同级目录
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-    }),
     new webpack.NoEmitOnErrorsPlugin(),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[id].css',
+    }),
   ],
+  optimization: {
+    runtimeChunk: {
+      name: 'manifest',
+    },
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, '../dist'), // 默认会以根文件夹提供本地服务器，这里指定文件夹
+    inline: true, // 自动刷新
+    hot: true, // 开启热模块替换
+    historyApiFallback: true, // 在开发单页应用时非常有用，它依赖于HTML5 history API，如果设置为true，所有的跳转将指向index.html
+    port: 9090, // 如果省略，默认8080
+    publicPath: '/',
+    compress: true, // 使用gzip压缩
+    stats: 'minimal',
+  },
 });

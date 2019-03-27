@@ -3,27 +3,19 @@
  */
 
 const path = require('path');
-const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // 指定入口文件，程序从这里开始编译,__dirname当前目录, ../表示上一级目录, ./同级目录
   entry: {
-    app: ['babel-polyfill', path.resolve(__dirname, '../src/index.js')],
-    vendor: ['react', 'react-dom', 'babel-polyfill'],
+    index: ['./src/index.js'],
+    vendor: ['react', 'react-dom'],
   },
   output: {
-    path: path.resolve(__dirname, '../dist'), // 输出的路径
-    filename: 'app/[name]_[hash:8].js', // 打包后文件
-    chunkFilename: 'app/chunks/[name].[chunkhash:5].chunk.js',
-  },
-  resolve: { // 配置模块如何解析
-    modules: [ // 解析模块时搜索目录，从上而下查找
-      path.resolve(__dirname, '../src'), // 优先搜索
-      path.resolve(__dirname, '../node_modules'),
-      'node_modules',
-    ],
-    extensions: ['.js', '.json', '.less'], // 自动解析确定的扩展
+    path: path.resolve(__dirname, '../dist/static'), // 输出的路径
+    filename: 'js/[name].[hash:8].js', // 打包后文件
+    chunkFilename: 'js/[name].[chunkhash:8].js',
   },
   module: {
     rules: [
@@ -39,28 +31,18 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
+        test: /\.(css|pcss)$/,
         use: [
-          { // 将打包的CSS文件通过STYLE标签的方式加入到HTML页面
-            loader: 'style-loader',
+          {
+            loader: MiniCssExtractPlugin.loader,
           },
-          { // 处理CSS文件
+          {
             loader: 'css-loader',
           },
-        ],
-      },
-      {
-        test: /\.less$/,
-        use: [{
-          loader: 'style-loader',
-        }, {
-          loader: 'css-loader',
-        }, {
-          loader: 'less-loader',
-          options: {
-            sourceMap: true,
+          {
+            loader: 'postcss-loader',
           },
-        }],
+        ],
       },
       {
         test: /\.(jpe?g|png|gif|svg|ico)/i,
@@ -68,30 +50,29 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'img_[hash:8].[ext]',
+              name: 'image/[name].[hash:8].[ext]',
             },
           },
         ],
       },
       {
-        test: /\.(ttf|eot|svg|woff|woff2)/,
+        test: /\.(ttf|eot|woff|woff2)/,
         use: [
           {
             loader: 'file-loader',
+            options: {
+              name: 'media/[name].[hash:8].[ext]',
+            },
           },
         ],
       },
     ],
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../src/index.template.html'),
+      template: path.resolve(__dirname, '../src/index.html'),
       inject: true,
-      favicon: path.resolve(__dirname, '../favicon.ico'),
+      favicon: path.resolve(__dirname, '../src/asset/images/favicon.ico'),
     }),
   ],
 };

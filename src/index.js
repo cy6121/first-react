@@ -4,25 +4,13 @@
  * Created by rain on 2017/12/17.
  */
 
+import './asset/css/main.pcss';
 import React from 'react';
-import { render } from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import 'babel-polyfill';
+import { hydrate } from 'react-dom';
 import App from './App';
 
-const renderDom = Component => {
-    render(
-        <AppContainer>
-            <Component />
-        </AppContainer>,
-        document.getElementById('app')
-    );
-};
-renderDom(App);
+hydrate(
+  <App />,
+  document.getElementById('app')
+);
 
-if (module.hot) {
-    module.hot.accept('./App', () => {
-        const App = require('./App').default;
-        renderDom(App);
-    })
-}

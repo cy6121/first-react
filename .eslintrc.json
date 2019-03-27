@@ -1,22 +1,26 @@
 {
+  "root": true,
   "parser": "babel-eslint",
-  "extends": "airbnb",
   "env": {
     "browser": true,
-    "node": true,
-    "es6": true
+    "commonjs": true,
+    "es6": true,
+    "node": true
   },
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
-    }
+    },
+    "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "react-hooks"
   ],
+  "extends": "airbnb",
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
     "react/jsx-no-bind": [
       "error",
       {
@@ -25,11 +29,26 @@
         "allowBind": true
       }
     ],
+    "react/prefer-stateless-function": ["off",
+      {
+        "ignorePureComponents": true
+      }
+    ],
+    "import/no-unresolved": "off",
+    "object-curly-newline": "off",
     "import/no-extraneous-dependencies": "off",
     "react/jsx-filename-extension": "off",
-    "no-unused-vars": "off",
-    "no-console": "error",
-    "react/prefer-stateless-function": "off",
-    "linebreak-style": "off"
+    "lines-between-class-members": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/require-default-props": "off",
+    "react/forbid-prop-types": "off",
+    "react/no-access-state-in-setstate": "off",
+    "react/destructuring-assignment": "off",
+    "react/no-unused-prop-types": "warn",
+    "react/no-danger": "off",
+    "no-unused-vars": "warn",
+    "react/no-unused-state": "warn",
+    "global-require": "off",
+    "no-console": "off"
   }
 }
